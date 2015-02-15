@@ -3,11 +3,15 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BibliotecaAppTest {
 
@@ -37,19 +41,54 @@ public class BibliotecaAppTest {
     }
 
     @Test
-    public void test_show_memu() throws Exception {
-        List<String> menu = new ArrayList<String>();
-        menu.add("List Books");
+    public void should_return_true_message_when_successful_checkout() throws Exception {
+        List<Book> books = new ArrayList<Book>();
+        Book book1 = new Book("book1", "Alice", 1992);
+        Book book2 = new Book("book2", "Bob", 1991);
+        Book book3 = new Book("book3", "Tuber", 1990);
+        books.add(book1);
+        books.add(book2);
+        books.add(book3);
 
-        app.showMenu(menu);
+        assertThat(app.checkout(book3, books), is("Thank you! Enjoy the book"));
     }
 
     @Test
-    public void should_return_true_when_select_true_menu() throws Exception {
-        List<String> menu = new ArrayList<String>();
-        menu.add("List Books");
-        app.showMenu(menu);
+    public void should_return_false_message_when_unsuccessful_checkout() throws Exception {
+        List<Book> books = new ArrayList<Book>();
+        Book book1 = new Book("book1", "Alice", 1992);
+        Book book2 = new Book("book2", "Bob", 1991);
+        Book book3 = new Book("book3", "Tuber", 1990);
+        books.add(book1);
+        books.add(book2);
+        books.add(book3);
 
-        //Todo: 等待用户输入
+        Book book4 = new Book("book3", "Tuber", 1990);
+        assertThat(app.checkout(book4, books), is("That book is not available."));
+    }
+
+    @Test
+    public void should_return_true_message_when_successful_checkin() throws Exception {
+        List<Book> books = new ArrayList<Book>();
+        Book book1 = new Book("book1", "Alice", 1992);
+        Book book2 = new Book("book2", "Bob", 1991);
+        books.add(book1);
+        books.add(book2);
+        
+        Book book3 = new Book("book3", "Tuber", 1990);
+        assertThat(app.checkin(book3, books), is("Thank you for returning the book."));
+    }
+
+    @Test
+    public void should_return_false_message_when_unsuccessful_checkin() throws Exception {
+        List<Book> books = new ArrayList<Book>();
+        Book book1 = new Book("book1", "Alice", 1992);
+        Book book2 = new Book("book2", "Bob", 1991);
+        Book book3 = new Book("book3", "Tuber", 1990);
+        books.add(book1);
+        books.add(book2);
+        books.add(book3);
+        
+        assertThat(app.checkin(book3, books), is("That is not a valid book to return."));
     }
 }
