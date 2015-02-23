@@ -14,6 +14,18 @@ public class Book {
         this.yearOfPublished = yearOfPublished;
     }
 
+    public Book(String... params) {
+        if (params.length>0) {
+            this.name = params[0];
+        }
+        if (params.length>1) {
+            this.author = params[1];
+        }
+        if (params.length>2) {
+            this.yearOfPublished = Integer.parseInt(params[2]);
+        }
+    }
+
     public String getName() {
         return name;
     }
